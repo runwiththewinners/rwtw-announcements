@@ -206,7 +206,7 @@ export default function AnnouncementsClient({ authenticated, isAdmin: isAdminPro
                 {a.ctaText && a.ctaUrl && (
                   <a href={a.ctaUrl} target="_blank" rel="noopener noreferrer" className="pinned-cta">{a.ctaText}</a>
                 )}
-                {isAdmin && showAdmin && (
+                {showAdmin && (
                   <div className="admin-card-actions">
                     <button className="aca-btn" onClick={() => handleTogglePin(a.id, a.pinned)}>Unpin</button>
                     <button className="aca-btn aca-delete" onClick={() => handleDelete(a.id)}>Delete</button>
@@ -242,7 +242,7 @@ export default function AnnouncementsClient({ authenticated, isAdmin: isAdminPro
                   <a href={a.ctaUrl} target="_blank" rel="noopener noreferrer" className="announce-btn btn-primary">{a.ctaText}</a>
                 </div>
               )}
-              {isAdmin && showAdmin && (
+              {showAdmin && (
                 <div className="admin-card-actions-bottom">
                   <button className="aca-btn" onClick={() => handleTogglePin(a.id, a.pinned)}>
                     {a.pinned ? "Unpin" : "Pin"}
@@ -262,9 +262,8 @@ export default function AnnouncementsClient({ authenticated, isAdmin: isAdminPro
             </div>
           )}
 
-          {/* Admin Panel */}
-          {isAdmin && (
-            <div className="admin-panel">
+          {/* Admin Panel - always visible, secret protects actions */}
+          <div className="admin-panel">
               <button className="admin-toggle" onClick={() => setShowAdmin(!showAdmin)}>
                 {showAdmin ? "▲ Hide Admin" : "⚙ Admin Controls"}
               </button>
@@ -336,7 +335,6 @@ export default function AnnouncementsClient({ authenticated, isAdmin: isAdminPro
                 </div>
               )}
             </div>
-          )}
 
         </div>
       </div>
