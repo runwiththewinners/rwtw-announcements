@@ -91,6 +91,25 @@ export async function POST(req: NextRequest) {
     ids.push(id);
     await redisSet("announcements:index", JSON.stringify(ids));
 
+    // Send push notification
+    const experienceId = process.env.WHOP_EXPERIENCE_ID;
+    if (experienceId) {
+      try {
+        const whopsdk = new (await import("@whop/sdk")).default({
+          apiKey: process.env.WHOP_API_KEY,
+          appID: process.env.NEXT_PUBLIC_WHOP_APP_ID,
+        });
+        await whopsdk.notifications.create({
+          experience_id: experienceId,
+          title: `📢 ${title}`,
+          content: content.slice(0, 200),
+        });
+        console.log("[ANNOUNCEMENTS] Push notification sent");
+      } catch (notifErr) {
+        console.error("[ANNOUNCEMENTS] Push notification failed:", notifErr);
+      }
+    }
+
     return NextResponse.json({ success: true, announcement });
   } catch (e: any) {
     console.error("[ANNOUNCEMENTS] Post error:", e);
