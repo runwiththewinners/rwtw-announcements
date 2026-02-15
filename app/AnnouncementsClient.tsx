@@ -25,10 +25,20 @@ const TYPE_CONFIG: Record<string, { label: string; icon: string; className: stri
   schedule: { label: "Schedule", icon: "📅", className: "type-schedule" },
 };
 
-export default function AnnouncementsClient({ authenticated, isAdmin }: Props) {
+export default function AnnouncementsClient({ authenticated, isAdmin: isAdminProp }: Props) {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [memberCount, setMemberCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(isAdminProp);
+
+  // Check URL for admin override
+  useEffect(() => {
+    if (isAdminProp) { setIsAdmin(true); return; }
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("admin") === "true") {
+      setIsAdmin(true);
+    }
+  }, [isAdminProp]);
 
   // Admin state
   const [showAdmin, setShowAdmin] = useState(false);
@@ -356,7 +366,7 @@ body{background:var(--page-bg);font-family:'DM Sans',system-ui,-apple-system,san
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap');
 
 .ann-wrap{min-height:100vh;overflow-x:hidden}
-.ann-content{max-width:500px;margin:0 auto;padding:0 20px 100px}
+.ann-content{max-width:500px;margin:0 auto;padding:0 20px 200px}
 
 /* Hero */
 .ann-hero{text-align:center;padding:44px 0 24px}
